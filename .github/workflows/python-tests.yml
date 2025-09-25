@@ -9,6 +9,10 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+        
+      - name: Set up bash and run environment setup
+        run: |
+          bash full_env_start.sh
 
       - name: Run custom script
         run: |
