@@ -1,66 +1,20 @@
 name: Python Tests
 
 on:
-  pull_request:
+   pull_request:
 
 jobs:
   test:
     runs-on: codesign-runner-test
-
-    # Make the secret available (masking still applies)
-    env:
-      SUDO_PASS: ${{ secrets.SUDO_PASS }}
-
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-
-      # Prime sudo non-interactively & keep it alive (skips on forked PRs)
-      - name: Prime sudo & keepalive
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          if [[ -z "${SUDO_PASS:-}" ]]; then
-            echo "SUDO_PASS not configured; skipping privileged steps."
-            exit 0
-          fi
-
-          echo "::add-mask::$SUDO_PASS"
-          echo "$SUDO_PASS" | sudo -S -v
-
-          # Keep sudo timestamp fresh while the job runs
-          ( while true; do sudo -n true; sleep 60; done ) &
-          echo $! > "$RUNNER_TEMP/sudo-keepalive.pid"
-
+        
       - name: Set up bash and run environment setup
-        shell: bash
         run: |
-          set -euo pipefail
           bash full_env_start.sh
 
-      - name: Run custom script (non-interactive sudo)
-        shell: bash
+      - name: Run custom script
         run: |
-          set -euo pipefail
           chmod +x scripts/scripts-ci.sh || true
-
-          # Let your script know if passwordless/non-interactive sudo is available
-          if sudo -n true 2>/dev/null; then
-            export CI_HAS_SUDO=1
-          else
-            export CI_HAS_SUDO=0
-          fi
-
           ./scripts/scripts-ci.sh
-
-      # Always clean up the keepalive
-      - name: Cleanup sudo keepalive
-        if: ${{ always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) }}
-        shell: bash
-        run: |
-          if [[ -f "$RUNNER_TEMP/sudo-keepalive.pid" ]]; then
-            kill "$(cat "$RUNNER_TEMP/sudo-keepalive.pid")" || true
-            rm -f "$RUNNER_TEMP/sudo-keepalive.pid"
-          fi
