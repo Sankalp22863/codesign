@@ -34,7 +34,24 @@ export HOME="$(pwd)"
 
 git submodule update --init --recursive openroad_interface/OpenROAD
 
-echo "{pwd}"
+BIN_PATH="../deps/OpenROAD/build/bin/openroad"
+SRC_PATH="openroad_interface/OpenROAD/build/src/openroad"
+
+echo "Checking for OpenROAD binary..."
+echo " -> Looking for BIN_PATH: $BIN_PATH"
+if [ -f "$BIN_PATH" ]; then
+    echo "✅ Found: $BIN_PATH"
+else
+    echo "❌ Not found: $BIN_PATH"
+    echo " -> Looking for SRC_PATH: $SRC_PATH"
+    if [ -f "$SRC_PATH" ]; then
+        echo "✅ Found: $SRC_PATH"
+    else
+        echo "❌ Not found: $SRC_PATH"
+        echo "OpenROAD executable not found. Running openroad_install.sh..."
+        # bash openroad_install.sh
+    fi
+fi
 
 if [ -f "../deps/OpenROAD/build/bin/openroad" ]; then
     echo "OpenROAD executable already exists."
