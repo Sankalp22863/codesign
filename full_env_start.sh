@@ -58,7 +58,7 @@ export HOME="$(pwd)"
 
 git submodule update --init --recursive openroad_interface/OpenROAD
 
-if [ -f "../../deps/OpenROAD/build/bin/openroad" ]; then
+if  [[ "${GITHUB_ACTIONS:-}" == "true" && -f "../../deps/OpenROAD/build/bin/openroad" ]]; then
     echo "OpenROAD executable already exists."
 else
     # check if the openroad executable exists
@@ -89,7 +89,7 @@ else
 fi
 
 
-if [ -f "../../deps/OpenROAD/build/bin/openroad" ]; then
+if [[ "${GITHUB_ACTIONS:-}" == "true" && -f "../../deps/OpenROAD/build/bin/openroad" ]]; then
     echo "OpenROAD installation completed successfully."
 else
     # Ensure that the OpenROAD executable was created
