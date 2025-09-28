@@ -30,9 +30,7 @@ SRC_PATH="openroad_interface/OpenROAD/build/src/openroad"
 
 
 
-echo "Checking for OpenROAD binary..."
-echo ">>> SCRIPT START $date"
-echo "PWD: $pwd"
+
 echo " -> Looking for BIN_PATH: $BIN_PATH"
 if [ -f "$BIN_PATH" ]; then
     echo "✅ Found: $BIN_PATH"
