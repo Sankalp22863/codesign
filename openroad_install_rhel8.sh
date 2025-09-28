@@ -4,21 +4,15 @@ export HOME="$(pwd)"
 export PATH="$HOME/.local/bin:$(echo "$PATH")"
 export CMAKE_PREFIX_PATH="$HOME/.local"
 
-# Helper that runs sudo non-interactively everywhere.
-mysudo() {
-  # -S read from stdin, -n no prompt, -p '' no prompt text
-  printf '%s\n' "$SUDO_PASSWORD" | sudo -S -n -p '' "$@"
-}
-
 cd openroad_interface/OpenROAD
 
-mysudo dnf install gcc-toolset-13
+sudo dnf install gcc-toolset-13
 source /opt/rh/gcc-toolset-13/enable
 which gcc
 gcc --version
 
 set +e
-mysudo ./etc/DependencyInstaller.sh -base 
+sudo ./etc/DependencyInstaller.sh -base 
 status=$?
 set -e
 
