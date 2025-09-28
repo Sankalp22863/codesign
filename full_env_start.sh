@@ -89,7 +89,7 @@ else
 fi
 
 
-if [ -f "../../deps/OpenROAD/build/src/openroad" ]; then
+if [ -f "../../deps/OpenROAD/build/bin/openroad" ]; then
     echo "OpenROAD installation completed successfully."
 else
     # Ensure that the OpenROAD executable was created
