@@ -89,13 +89,16 @@ else
 fi
 
 
-
-# Ensure that the OpenROAD executable was created
-if [ -f "openroad_interface/OpenROAD/build/src/openroad" ]; then
+if [ -f "../../deps/OpenROAD/build/src/openroad" ]; then
     echo "OpenROAD installation completed successfully."
 else
-    echo "OpenROAD installation failed."
-    exit 1
+    # Ensure that the OpenROAD executable was created
+    if [ -f "openroad_interface/OpenROAD/build/src/openroad" ]; then
+        echo "OpenROAD installation completed successfully."
+    else
+        echo "OpenROAD installation failed."
+        exit 1
+    fi
 fi
 
 ################ SET UP SCALEHLS ##################
