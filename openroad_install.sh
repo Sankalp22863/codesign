@@ -2,10 +2,18 @@
 
 cd openroad_interface/OpenROAD
 
+# Helper that runs sudo non-interactively everywhere.
+mysudo() {
+  # -S read from stdin, -n no prompt, -p '' no prompt text
+  printf '%s\n' "$SUDO_PASSWORD" | sudo -S -n -p '' "$@"
+}
+
 set +e
-sudo -n ./etc/DependencyInstaller.sh -base 
+mysudo -n ./etc/DependencyInstaller.sh -base 
 status=$?
 set -e
+
+
 
 if [ $status -ne 0 ]; then
     echo "DependencyInstaller failed. Attempting manual pandoc install..."
@@ -13,7 +21,7 @@ if [ $status -ne 0 ]; then
     arch=amd64
     pandocVersion=3.1.11.1
     eval wget https://github.com/jgm/pandoc/releases/download/${pandocVersion}/pandoc-${pandocVersion}-linux-${arch}.tar.gz
-    sudo -n tar xvzf pandoc-${pandocVersion}-linux-${arch}.tar.gz --strip-components 1 -C /usr/local/
+    mysudo -n tar xvzf pandoc-${pandocVersion}-linux-${arch}.tar.gz --strip-components 1 -C /usr/local/
     rm -rf pandoc-${pandocVersion}-linux-${arch}.tar.gz
 
 fi
