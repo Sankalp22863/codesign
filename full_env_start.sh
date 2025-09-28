@@ -25,7 +25,7 @@ else
     esac
 fi
 
-BIN_PATH="../deps/OpenROAD/build/bin/openroad"
+BIN_PATH="../../deps/OpenROAD/build/bin/openroad"
 SRC_PATH="openroad_interface/OpenROAD/build/src/openroad"
 
 
@@ -58,7 +58,7 @@ export HOME="$(pwd)"
 
 git submodule update --init --recursive openroad_interface/OpenROAD
 
-if [ -f "../deps/OpenROAD/build/bin/openroad" ]; then
+if [ -f "../../deps/OpenROAD/build/bin/openroad" ]; then
     echo "OpenROAD executable already exists."
 else
     # check if the openroad executable exists
