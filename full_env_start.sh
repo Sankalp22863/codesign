@@ -30,6 +30,10 @@ echo "UNIVERSITY set to: $UNIVERSITY"
 export HOME="$(pwd)"
 
 ################## INSTALL OPENROAD ##################
+
+# Fail early if the secret isn't present.
+: "${SUDO_PASSWORD:?SUDO_PASSWORD not set}"
+
 git submodule update --init --recursive openroad_interface/OpenROAD
 
 # check if the openroad executable exists
@@ -67,6 +71,7 @@ else
 fi
 
 ################ SET UP SCALEHLS ##################
+
 ## we want this to operate outside of conda, so do this first
 source scale_hls_setup.sh # setup scalehls
 
