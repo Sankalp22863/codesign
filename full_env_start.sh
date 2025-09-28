@@ -31,36 +31,40 @@ export HOME="$(pwd)"
 
 ################## INSTALL OPENROAD ##################
 
-# Fail early if the secret isn't present.
-: "${SUDO_PASSWORD:?SUDO_PASSWORD not set}"
 
 git submodule update --init --recursive openroad_interface/OpenROAD
 
-# check if the openroad executable exists
-if [ -f "openroad_interface/OpenROAD/build/src/openroad" ]; then
+if [ -f ../deps/OpenROAD/build/src/openroad ]; then
     echo "OpenROAD executable already exists."
 else
-    echo "OpenROAD executable not found. Running openroad_install.sh..."
-    # Check OS, run openroad install script
-    if [ -f /etc/redhat-release ]; then
-        OS_VERSION=$(cat /etc/redhat-release)
-        case "$OS_VERSION" in 
-            *"Rocky Linux release 8"*|*"Red Hat Enterprise Linux release 8"*)
-                bash openroad_install_rhel8.sh
-            ;;
-            *"Rocky Linux release 9"*|*"Red Hat Enterprise Linux release 9"*)
-                bash openroad_install.sh
-            ;;
-            *)
-                echo "Unsupported Rocky Linux version: $OS_VERSION"
-                exit 1
-            ;;
-        esac    
+    # check if the openroad executable exists
+    if [ -f "openroad_interface/OpenROAD/build/src/openroad" ]; then
+        echo "OpenROAD executable already exists."
     else
-        echo "Unsupported OS"
-        exit 1
+        echo "OpenROAD executable not found. Running openroad_install.sh..."
+        # Check OS, run openroad install script
+        if [ -f /etc/redhat-release ]; then
+            OS_VERSION=$(cat /etc/redhat-release)
+            case "$OS_VERSION" in 
+                *"Rocky Linux release 8"*|*"Red Hat Enterprise Linux release 8"*)
+                    bash openroad_install_rhel8.sh
+                ;;
+                *"Rocky Linux release 9"*|*"Red Hat Enterprise Linux release 9"*)
+                    bash openroad_install.sh
+                ;;
+                *)
+                    echo "Unsupported Rocky Linux version: $OS_VERSION"
+                    exit 1
+                ;;
+            esac    
+        else
+            echo "Unsupported OS"
+            exit 1
+        fi
     fi
 fi
+
+
 
 # Ensure that the OpenROAD executable was created
 if [ -f "openroad_interface/OpenROAD/build/src/openroad" ]; then
