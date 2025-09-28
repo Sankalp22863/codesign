@@ -9,12 +9,18 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+
+       - name: Debug echo
+        run: |
+          echo ">>> CI is running inside Python Tests workflow on $(date)"
+          echo "Current directory: $(pwd)"
+          ls -la
         
       - name: Set up bash and run environment setup
         env:
           SUDO_PASSWORD: ${{ secrets.SUDO_PASSWORD }}
         run: |
-          source bash full_env_start.sh
+          source ./full_env_start.sh
 
       - name: Run custom script
         run: |
