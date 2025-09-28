@@ -25,15 +25,6 @@ else
     esac
 fi
 
-echo "UNIVERSITY set to: $UNIVERSITY"
-
-export HOME="$(pwd)"
-
-################## INSTALL OPENROAD ##################
-
-
-git submodule update --init --recursive openroad_interface/OpenROAD
-
 BIN_PATH="../deps/OpenROAD/build/bin/openroad"
 SRC_PATH="openroad_interface/OpenROAD/build/src/openroad"
 
@@ -52,6 +43,15 @@ else
         # bash openroad_install.sh
     fi
 fi
+
+echo "UNIVERSITY set to: $UNIVERSITY"
+
+export HOME="$(pwd)"
+
+################## INSTALL OPENROAD ##################
+
+
+git submodule update --init --recursive openroad_interface/OpenROAD
 
 if [ -f "../deps/OpenROAD/build/bin/openroad" ]; then
     echo "OpenROAD executable already exists."
