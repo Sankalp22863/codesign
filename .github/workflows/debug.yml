@@ -1,0 +1,13 @@
+name: Debug Workflow
+
+on:
+  workflow_dispatch:  # manual trigger in Actions tab
+  push:               # runs when you push to your fork
+    branches:
+      - main
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ">>> Debug workflow running at $(date)"
