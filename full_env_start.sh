@@ -34,6 +34,8 @@ export HOME="$(pwd)"
 
 git submodule update --init --recursive openroad_interface/OpenROAD
 
+echo "{pwd}"
+
 if [ -f ../deps/OpenROAD/build/bin/openroad ]; then
     echo "OpenROAD executable already exists."
 else
