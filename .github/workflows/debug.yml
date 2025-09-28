@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: codesign-runner-test
+    runs-on: codesign-test-2
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
