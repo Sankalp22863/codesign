@@ -28,6 +28,11 @@ fi
 BIN_PATH="../deps/OpenROAD/build/bin/openroad"
 SRC_PATH="openroad_interface/OpenROAD/build/src/openroad"
 
+echo ">>> SCRIPT START $(date)"
+echo "PWD: $(pwd)"
+echo "Contents:"
+ls -la
+
 echo "Checking for OpenROAD binary..."
 echo " -> Looking for BIN_PATH: $BIN_PATH"
 if [ -f "$BIN_PATH" ]; then
