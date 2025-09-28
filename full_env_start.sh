@@ -29,7 +29,10 @@ BIN_PATH="../deps/OpenROAD/build/bin/openroad"
 SRC_PATH="openroad_interface/OpenROAD/build/src/openroad"
 
 
-
+printf '>>> SCRIPT START %s\n' "$(date)"
+printf 'PWD: %s\n' "$(pwd)"
+printf 'Contents:\n'
+ls -la
 
 echo " -> Looking for BIN_PATH: $BIN_PATH"
 if [ -f "$BIN_PATH" ]; then
