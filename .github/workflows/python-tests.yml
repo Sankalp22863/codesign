@@ -11,8 +11,10 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Set up bash and run environment setup
+        env:
+          SUDO_PASSWORD: ${{ secrets.SUDO_PASSWORD }}
         run: |
-          bash full_env_start.sh
+          echo "$SUDO_PASSWORD" | sudo -S -n bash full_env_start.sh
 
       - name: Run custom script
         run: |
