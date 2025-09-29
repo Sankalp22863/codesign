@@ -9,6 +9,8 @@ echo "🔎 Linting…"
 
 echo "🧪 Running tests…"
 
+source miniconda3/etc/profile.d/conda.sh
+
 # Check if a conda environment is already active
 if [[ -z "${CONDA_DEFAULT_ENV:-}" ]]; then
   echo "No conda environment active. Activating 'codesign'..."
