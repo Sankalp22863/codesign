@@ -11,6 +11,7 @@ echo "🧪 Running tests…"
 
 source miniconda3/etc/profile.d/conda.sh
 
+
 # Check if a conda environment is already active
 if [[ -z "${CONDA_DEFAULT_ENV:-}" ]]; then
   echo "No conda environment active. Activating 'codesign'..."
@@ -20,6 +21,10 @@ if [[ -z "${CONDA_DEFAULT_ENV:-}" ]]; then
 else
   echo "✅ Conda environment already active: $CONDA_DEFAULT_ENV"
 fi
+
+############### Add useful alisas ###############
+alias create_checkpoint="python3 -m test.checkpoint_controller"
+alias run_codesign="python3 -m src.codesign"
 
 
 run_codesign --config vitis_gemm_checkpoint_after_pd
