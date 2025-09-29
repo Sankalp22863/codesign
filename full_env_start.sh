@@ -109,9 +109,12 @@ source scale_hls_setup.sh # setup scalehls
 ################### SET UP CONDA ENVIRONMENT ##################
 # Check if the directory miniconda3 exists
 if [ -d "miniconda3" ]; then
+    echo "CONDA CONDA CONDA CONDA CONDA CONDA CONDA CONDA CONDA CONDA"
     export PATH="$(pwd)/miniconda3/bin:$PATH"
     source miniconda3/etc/profile.d/conda.sh
+    echo "CONDA CONDA CONDA CONDA CONDA CONDA CONDA CONDA CONDA CONDA"
 else
+    echo "NO CONDA NO CONDA NO CONDA NO CONDA NO CONDA NO CONDA"
     # Install and set up environment
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
     bash Miniconda3-latest-Linux-x86_64.sh -b -p "$(pwd)/miniconda3"
