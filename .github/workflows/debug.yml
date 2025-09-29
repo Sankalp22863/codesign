@@ -5,6 +5,7 @@ on:
   push:               
     branches:
       - main
+      - eric/latest
 
 jobs:
   test:
