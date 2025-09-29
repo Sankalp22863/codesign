@@ -9,14 +9,14 @@ echo "🔎 Linting…"
 
 echo "🧪 Running tests…"
 
-# Check if a conda environment is already active
-if [[ -z "${CONDA_DEFAULT_ENV:-}" ]]; then
-  echo "No conda environment active. Activating 'codesign'..."
-  # Adjust 'myenv' to the environment name you want
-  conda activate codesign
-else
-  echo "✅ Conda environment already active: $CONDA_DEFAULT_ENV"
-fi
+# # Check if a conda environment is already active
+# if [[ -z "${CONDA_DEFAULT_ENV:-}" ]]; then
+#   echo "No conda environment active. Activating 'codesign'..."
+#   # Adjust 'myenv' to the environment name you want
+#   conda activate codesign
+# else
+#   echo "✅ Conda environment already active: $CONDA_DEFAULT_ENV"
+# fi
 
 conda activate codesing
 
