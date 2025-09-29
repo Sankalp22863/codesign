@@ -1,5 +1,38 @@
 #!/bin/bash
 
+################## CHECK BUILD LOG / FORCE FULL ##################
+BUILD_LOG="build.log"
+FORCE_FULL=0
+
+# Parse command line options
+for arg in "$@"; do
+    if [[ "$arg" == "--full" ]]; then
+        FORCE_FULL=1
+        break
+    fi
+done
+
+if [[ $FORCE_FULL -eq 0 ]]; then
+    if [[ ! -f "$BUILD_LOG" ]]; then
+        echo "No build log found — forcing full build."
+        FORCE_FULL=1
+    else
+        last_epoch=$(date -r "$BUILD_LOG" +%s)
+        now_epoch=$(date +%s)
+        diff_days=$(( (now_epoch - last_epoch) / 86400 ))
+        if [[ $diff_days -ge 7 ]]; then
+            echo "Last build was $diff_days days ago — forcing full build."
+            FORCE_FULL=1
+        fi
+    fi
+fi
+
+if [[ $FORCE_FULL -eq 1 ]]; then
+    echo ">>> Performing FULL build"
+else
+    echo ">>> Performing incremental build"
+fi
+
 ################## PARSE UNIVERSITY ARGUMENT ##################
 
 host=$(hostname)
@@ -130,16 +163,21 @@ else
 fi
 
 
-## update conda packages
-conda update -n base -c defaults conda # update conda itself
-conda config --set channel_priority strict
-conda env update -f environment_simplified.yml --prune # update the environment
+if [[ $FORCE_FULL -eq 1 ]]; then
+    ## update conda packages
+    conda update -n base -c defaults conda # update conda itself
+    conda config --set channel_priority strict
+    conda env update -f environment_simplified.yml --prune # update the environment
+fi
 
 conda activate codesign # activate the codesign environment
 
 
 ## update the rest of the submodules
-git submodule update --init --recursive
+if [[ $FORCE_FULL -eq 1 ]]; then
+    git submodule update --init --recursive
+fi
+
 
 ###############  BUILD CACTI #################3
 cd src/cacti
@@ -160,3 +198,15 @@ else
     echo "Unsupported university for licensed cad tool setup: $UNIVERSITY"
     exit 1
 fi
+############### Add useful alisas ###############
+alias create_checkpoint="python3 -m test.checkpoint_controller"
+alias run_codesign="python3 -m src.codesign"
+
+################## SUCCESSFUL BUILD LOG ##################
+if [[ $FORCE_FULL -eq 1 ]]; then
+    date "+%Y-%m-%d %H:%M:%S" > "$BUILD_LOG"
+fi
+
+echo "Last full build completed successfully on $(cat $BUILD_LOG)"which
+
+echo "Environment setup complete."
