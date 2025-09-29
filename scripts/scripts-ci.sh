@@ -26,6 +26,7 @@ fi
 alias create_checkpoint="python3 -m test.checkpoint_controller"
 alias run_codesign="python3 -m src.codesign"
 
+echo "Activated the alias succesfully!"
 
 run_codesign --config vitis_gemm_checkpoint_after_pd
 
