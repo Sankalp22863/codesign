@@ -23,6 +23,9 @@ else
 fi
 
 ############### Add useful alisas ###############
+
+shopt -s expand_aliases
+
 alias create_checkpoint="python3 -m test.checkpoint_controller"
 alias run_codesign="python3 -m src.codesign"
 
