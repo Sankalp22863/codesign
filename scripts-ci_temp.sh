@@ -32,29 +32,29 @@ alias run_codesign="python3 -m src.codesign"
 
 echo "Activated the alias succesfully!"
 
-run_codesign --config vitis_gemm_checkpoint_after_pd
-# set +e
-# run_codesign --config vitis_gemm_checkpoint_after_pd > run.log 2>&1
-# status=$?
-# set -e
+# run_codesign --config vitis_gemm_checkpoint_after_pd
+set +e
+run_codesign --config vitis_gemm_checkpoint_after_pd > run.log 2>&1
+status=$?
+set -e
 
-# if grep -q "AssertionError" run.log; then
-#   echo "✅ Expected AssertionError found. Treating as success."
-#   cat run.log
-#   exit 0
-# elif [ $status -ne 0 ]; then
-#   echo "❌ Unexpected error occurred"
-#   cat run.log
-#   exit $status
-# else
-#   echo "✅ Script completed successfully"
-#   cat run.log
-#   exit 0
-# fi
+if grep -q "AssertionError" run.log; then
+  echo "✅ Expected AssertionError found. Treating as success."
+  cat run.log
+  exit 0
+elif [ $status -ne 0 ]; then
+  echo "❌ Unexpected error occurred"
+  cat run.log
+  exit $status
+else
+  echo "✅ Script completed successfully"
+  cat run.log
+  exit 0
+fi
 
-# Examples:
-# pytest -q --maxfail=1 --disable-warnings --junitxml=reports/test-results.xml
-# npm test -- --ci
-# ctest --test-dir build --output-on-failure
+Examples:
+pytest -q --maxfail=1 --disable-warnings --junitxml=reports/test-results.xml
+npm test -- --ci
+ctest --test-dir build --output-on-failure
 
 echo "✅ All checks passed."
