@@ -58,60 +58,96 @@ else
     esac
 fi
 
+BIN_PATH="../../deps/OpenROAD/build/bin/openroad"
+SRC_PATH="openroad_interface/OpenROAD/build/src/openroad"
+
+
+printf '>>> SCRIPT START %s\n' "$(date)"
+printf 'PWD: %s\n' "$(pwd)"
+printf 'Contents:\n'
+ls -la
+
+echo " -> Looking for BIN_PATH: $BIN_PATH"
+if [ -f "$BIN_PATH" ]; then
+    echo "✅ Found: $BIN_PATH"
+else
+    echo "❌ Not found: $BIN_PATH"
+    echo " -> Looking for SRC_PATH: $SRC_PATH"
+    if [ -f "$SRC_PATH" ]; then
+        echo "✅ Found: $SRC_PATH"
+    else
+        echo "❌ Not found: $SRC_PATH"
+        echo "OpenROAD executable not found. Running openroad_install.sh..."
+        # bash openroad_install.sh
+    fi
+fi
+
 echo "UNIVERSITY set to: $UNIVERSITY"
 
-## set home directory to codesign home directory
 export HOME="$(pwd)"
-export PATH="$HOME/.local/bin:$(echo "$PATH")"
-export CMAKE_PREFIX_PATH="$HOME/.local"
 
 ################## INSTALL OPENROAD ##################
+
+
 git submodule update --init --recursive openroad_interface/OpenROAD
 
-# check if the openroad executable exists
-if [ -f "openroad_interface/OpenROAD/build/src/openroad" ]; then
+if  [[ "${GITHUB_ACTIONS:-}" == "true" && -f "../../deps/OpenROAD/build/bin/openroad" ]]; then
     echo "OpenROAD executable already exists."
 else
-    echo "OpenROAD executable not found. Running openroad_install.sh..."
-    # Check OS, run openroad install script
-    if [ -f /etc/redhat-release ]; then
-        OS_VERSION=$(cat /etc/redhat-release)
-        case "$OS_VERSION" in 
-            *"Rocky Linux release 8"*|*"Red Hat Enterprise Linux release 8"*)
-                bash openroad_install_rhel8.sh
-            ;;
-            *"Rocky Linux release 9"*|*"Red Hat Enterprise Linux release 9"*)
-                bash openroad_install.sh
-            ;;
-            *)
-                echo "Unsupported Rocky Linux version: $OS_VERSION"
-                exit 1
-            ;;
-        esac    
+    # check if the openroad executable exists
+    if [ -f "openroad_interface/OpenROAD/build/src/openroad" ]; then
+        echo "OpenROAD executable already exists."
     else
-        echo "Unsupported OS"
+        echo "OpenROAD executable not found. Running openroad_install.sh..."
+        # Check OS, run openroad install script
+        if [ -f /etc/redhat-release ]; then
+            OS_VERSION=$(cat /etc/redhat-release)
+            case "$OS_VERSION" in 
+                *"Rocky Linux release 8"*|*"Red Hat Enterprise Linux release 8"*)
+                    bash openroad_install_rhel8.sh
+                ;;
+                *"Rocky Linux release 9"*|*"Red Hat Enterprise Linux release 9"*)
+                    bash openroad_install.sh
+                ;;
+                *)
+                    echo "Unsupported Rocky Linux version: $OS_VERSION"
+                    exit 1
+                ;;
+            esac    
+        else
+            echo "Unsupported OS"
+            exit 1
+        fi
+    fi
+fi
+
+
+if [[ "${GITHUB_ACTIONS:-}" == "true" && -f "../../deps/OpenROAD/build/bin/openroad" ]]; then
+    echo "OpenROAD installation completed successfully."
+else
+    # Ensure that the OpenROAD executable was created
+    if [ -f "openroad_interface/OpenROAD/build/src/openroad" ]; then
+        echo "OpenROAD installation completed successfully."
+    else
+        echo "OpenROAD installation failed."
         exit 1
     fi
 fi
 
-# Ensure that the OpenROAD executable was created
-if [ -f "openroad_interface/OpenROAD/build/src/openroad" ]; then
-    echo "OpenROAD installation completed successfully."
-else
-    echo "OpenROAD installation failed."
-    exit 1
-fi
-
 ################ SET UP SCALEHLS ##################
+
 ## we want this to operate outside of conda, so do this first
-source scale_hls_setup.sh $FORCE_FULL # setup scalehls
+source scale_hls_setup.sh # setup scalehls
 
 ################### SET UP CONDA ENVIRONMENT ##################
 # Check if the directory miniconda3 exists
 if [ -d "miniconda3" ]; then
+    echo "CONDA CONDA CONDA CONDA CONDA CONDA CONDA CONDA CONDA CONDA"
     export PATH="$(pwd)/miniconda3/bin:$PATH"
     source miniconda3/etc/profile.d/conda.sh
+    echo "CONDA CONDA CONDA CONDA CONDA CONDA CONDA CONDA CONDA CONDA"
 else
+    echo "NO CONDA NO CONDA NO CONDA NO CONDA NO CONDA NO CONDA"
     # Install and set up environment
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
     bash Miniconda3-latest-Linux-x86_64.sh -b -p "$(pwd)/miniconda3"
@@ -142,6 +178,7 @@ if [[ $FORCE_FULL -eq 1 ]]; then
     git submodule update --init --recursive
 fi
 
+
 ###############  BUILD CACTI #################3
 cd src/cacti
 make
@@ -161,7 +198,6 @@ else
     echo "Unsupported university for licensed cad tool setup: $UNIVERSITY"
     exit 1
 fi
-
 ############### Add useful alisas ###############
 alias create_checkpoint="python3 -m test.checkpoint_controller"
 alias run_codesign="python3 -m src.codesign"
