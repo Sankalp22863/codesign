@@ -22,6 +22,7 @@ else
   echo "✅ Conda environment already active: $CONDA_DEFAULT_ENV"
 fi
 
+
 ############### Add useful alisas ###############
 
 shopt -s expand_aliases
