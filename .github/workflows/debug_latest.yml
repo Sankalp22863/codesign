@@ -23,6 +23,10 @@ jobs:
           echo ">>> CI is running inside Python Tests workflow on $(date)"
           echo "Current directory: $(pwd)"
           ls -la
+      - name: Remove old workspace
+        run: |
+          rm -rf *
+          rm -rf .[^.] .??*
         
       - name: Set up bash and run environment setup
         env:
