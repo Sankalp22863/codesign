@@ -1,10 +1,34 @@
+name: Debug Latest Workflow
+
 on:
-  push:
-    branches: [ eric/latest ]
-  workflow_dispatch:
+  workflow_dispatch:  
+  push:               
+    branches:
+      - eric/latest
 
 jobs:
-  call:
-    uses: ./.github/workflows/base-ci.yml
-    with:
-      ref: ${{ github.sha }}
+  test:
+    runs-on: codesign-test-2
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+
+      - name: Debug-echo
+        run: |
+          echo ">>> CI is running inside Python Tests workflow on $(date)"
+          echo "Current directory: $(pwd)"
+          ls -la
+        
+      - name: Set up bash and run environment setup
+        env:
+          SUDO_PASSWORD: ${{ secrets.SUDO_PASSWORD }}
+        run: |
+          source ./full_env_start.sh
+
+      - name: Run custom script
+        run: |
+          chmod +x scripts/scripts-ci.sh || true
+          ./scripts/scripts-ci.sh
