@@ -1,0 +1,10 @@
+on:
+  push:
+    branches: [ eric/latest ]
+  workflow_dispatch:
+
+jobs:
+  call:
+    uses: ./.github/workflows/base-ci.yml
+    with:
+      ref: ${{ github.sha }}
