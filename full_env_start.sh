@@ -58,8 +58,8 @@ else
     esac
 fi
 
-BIN_PATH="../../deps/OpenROAD/build/bin/openroad"
-SRC_PATH="openroad_interface/OpenROAD/build/src/openroad"
+OPENROAD_PRE_INSTALLED_BIN_PATH="../../../../deps/OpenROAD/build/bin/openroad"
+OPENROAD_PREINSTALLED_SRC_PATH="openroad_interface/OpenROAD/build/src/openroad"
 
 
 printf '>>> SCRIPT START %s\n' "$(date)"
@@ -67,16 +67,16 @@ printf 'PWD: %s\n' "$(pwd)"
 printf 'Contents:\n'
 ls -la
 
-echo " -> Looking for BIN_PATH: $BIN_PATH"
-if [ -f "$BIN_PATH" ]; then
-    echo "✅ Found: $BIN_PATH"
+echo " -> Looking for BIN_PATH: $OPENROAD_PRE_INSTALLED_BIN_PATH"
+if [ -f "$OPENROAD_PRE_INSTALLED_BIN_PATH" ]; then
+    echo "!!!!! Found: $OPENROAD_PRE_INSTALLED_BIN_PATH"
 else
-    echo "❌ Not found: $BIN_PATH"
-    echo " -> Looking for SRC_PATH: $SRC_PATH"
-    if [ -f "$SRC_PATH" ]; then
-        echo "✅ Found: $SRC_PATH"
+    echo "XXXXX Not found: $OPENROAD_PRE_INSTALLED_BIN_PATH"
+    echo " -> Looking for Open road pre installed SRC_PATH: $OPENROAD_PREINSTALLED_SRC_PATH"
+    if [ -f "$OPENROAD_PREINSTALLED_SRC_PATH" ]; then
+        echo "!!!!! Found: $OPENROAD_PREINSTALLED_SRC_PATH"
     else
-        echo "❌ Not found: $SRC_PATH"
+        echo "XXXXX Not found: $OPENROAD_PREINSTALLED_SRC_PATH"
         echo "OpenROAD executable not found. Running openroad_install.sh..."
         # bash openroad_install.sh
     fi
@@ -91,7 +91,7 @@ export HOME="$(pwd)"
 
 git submodule update --init --recursive openroad_interface/OpenROAD
 
-if  [[ "${GITHUB_ACTIONS:-}" == "true" && -f "../../deps/OpenROAD/build/bin/openroad" ]]; then
+if  [[ "${GITHUB_ACTIONS:-}" == "true" && -f $OPENROAD_PRE_INSTALLED_BIN_PATH ]]; then
     echo "OpenROAD executable already exists."
 else
     # check if the openroad executable exists
@@ -122,7 +122,7 @@ else
 fi
 
 
-if [[ "${GITHUB_ACTIONS:-}" == "true" && -f "../../deps/OpenROAD/build/bin/openroad" ]]; then
+if [[ "${GITHUB_ACTIONS:-}" == "true" && -f $OPENROAD_PRE_INSTALLED_BIN_PATH ]]; then
     echo "OpenROAD installation completed successfully."
 else
     # Ensure that the OpenROAD executable was created
