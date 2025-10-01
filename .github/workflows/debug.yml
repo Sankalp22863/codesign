@@ -8,6 +8,7 @@ on:
 
 jobs:
   test:
+    name: Codesign-Automated-Test
     runs-on: codesign-test-2
     steps:
       - name: Check out repository code
